@@ -62,26 +62,56 @@ class Princess extends Sprite {
     }
     handleGameLoop() {
         if (this.angle <= 0 && this.speed >= 0) {
-         this.playAnimation = this.handleRightArrowKey();
+            this.playAnimation = this.handleRightArrowKey();
         }
 
         if (this.angle <= 180 && this.speed >= 0) {
             this.playAnimation = this.handleLeftArrowKey();
         }
         this.x = Math.max(5, this.x);
-        
-       this.isFalling = false;  // assume she is not falling unless proven otherwise
-// Check directly below princess for supports
-let supports = game.getSpritesOverlapping(this.x, this.y + this.height, this.width, 1, Support);
-// Is there none, or is its *top* above the bottom of the princess?
-if (supports.length === 0 || supports[0].y < this.y + this.height) {
-     this.isFalling = true;     // she is falling so ...
-     this.y = this.y + 4;       // simulate gravity
-}
+
+        this.isFalling = false; // assume she is not falling unless proven otherwise
+        // Check directly below princess for supports
+        let supports = game.getSpritesOverlapping(this.x, this.y + this.height, this.width, 1, Support);
+        // Is there none, or is its *top* above the bottom of the princess?
+        if (supports.length === 0 || supports[0].y < this.y + this.height) {
+            this.isFalling = true; // she is falling so ...
+            this.y = this.y + 4; // simulate gravity
+        }
 
     }
-    Princess(){ 
+    Princess() {
         let ann = new Princess();
+    }
+    handleSpacebar() {
+        if (!this.isFalling) {
+            this.y = this.y - 1.25 * this.height; // jump
+        }
+    }
+    
+    handleBoundaryContact() {
+        game.end('Princess Ann has drowned.\n\nBetter luck next time.');
+        this.true;
     }
 }
 new Princess(40, 300, "ann.png");
+
+class Door extends Sprite {
+    constructor(){
+    super();
+    this.setImage("door.png");
+    this.x = game.displayWidth - 48;
+    this.y = finishPlatform - 2 * 48;
+    this.accelerateOnBounce = false;
+        
+    }
+    handleCollision(otherSprite) {
+    if(otherSprite === Princess) {
+        game.end( 'Congratulations!\n\nPrincess Ann can now pursue' 
+        + 'the\nstranger deeper into the castle!')
+    }    
+    }
+    exit() {
+        this.name = "The exit door";
+    }
+}
