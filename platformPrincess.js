@@ -80,40 +80,37 @@ class Princess extends Sprite {
         }
 
     }
-    Princess() {
-        let ann = new Princess();
-    }
     handleSpacebar() {
         if (!this.isFalling) {
             this.y = this.y - 1.25 * this.height; // jump
         }
     }
-    
+
     handleBoundaryContact() {
         game.end('Princess Ann has drowned.\n\nBetter luck next time.');
         this.true;
     }
 }
-new Princess(40, 300, "ann.png");
+let ann = new Princess(40, 300, "ann.png");
 
 class Door extends Sprite {
-    constructor(x, y){
-    super(x, y);
-    this.setImage("door.png");
-    this.accelerateOnBounce = false;
-        
+    constructor(x, y) {
+        super();
+        this.name = "The exite door";
+        this.setImage("door.png");
+        this.accelerateOnBounce = false;
+        this.x = x;
+        this.y = y;
+
     }
     handleCollision(otherSprite) {
-    if(otherSprite === Princess) {
-        game.end( 'Congratulations!\n\nPrincess Ann can now pursue' 
-        + 'the\nstranger deeper into the castle!')
-    }    
-    }
-    exit() {
-        this.name = "The exit door";
+        if (otherSprite === ann) {
+            game.end('Congratulations!\n\nPrincess Ann can now pursue' +
+                'the\nstranger deeper into the castle!')
+        }
     }
 }
-new Door(game.displayWidth - 48, finishPlatform - 2 * 48);
+let exit = new Door(game.displayWidth - 48, finishPlatform.y - 2 * 48);
 
 class Spider extends Sprite {
     constructor(x, y) {
