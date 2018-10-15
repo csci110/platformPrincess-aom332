@@ -50,7 +50,7 @@ class Princess extends Sprite {
         this.speedWhenWalking = 125;
         this.defineAnimation("left", 10, 12);
         this.defineAnimation("right", 4, 6);
-
+        this.isFalling = false;
     }
     handleLeftArrowKey() {
         this.angle = 180;
@@ -69,6 +69,16 @@ class Princess extends Sprite {
             this.playAnimation = this.handleLeftArrowKey();
         }
         this.x = Math.max(5, this.x);
+        
+       this.isFalling = false;  // assume she is not falling unless proven otherwise
+// Check directly below princess for supports
+let supports = game.getSpritesOverlapping(this.x, this.y + this.height, this.width, 1, Support);
+// Is there none, or is its *top* above the bottom of the princess?
+if (supports.length === 0 || supports[0].y < this.y + this.height) {
+     this.isFalling = true;     // she is falling so ...
+     this.y = this.y + 4;       // simulate gravity
+}
+
     }
     Princess(){ 
         let ann = new Princess();
