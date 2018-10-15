@@ -48,8 +48,8 @@ class Princess extends Sprite {
         this.setImage("ann.png");
         this.speed = 0;
         this.speedWhenWalking = 125;
-        this.defineAnimation("left", 10, 12);
-        this.defineAnimation("right", 4, 6);
+        this.defineAnimation("left", 9, 11);
+        this.defineAnimation("right", 3, 5);
         this.isFalling = false;
     }
     handleLeftArrowKey() {
@@ -61,12 +61,12 @@ class Princess extends Sprite {
         this.speed = this.speedWhenWalking;
     }
     handleGameLoop() {
-        if (this.angle <= 0 && this.speed >= 0) {
-            this.playAnimation = this.handleRightArrowKey();
+        if (this.angle === 0 && this.speed >= 0) {
+            this.playAnimation("right", true);
         }
 
-        if (this.angle <= 180 && this.speed >= 0) {
-            this.playAnimation = this.handleLeftArrowKey();
+        if (this.angle === 180 && this.speed >= 0) {
+            this.playAnimation("left", true);
         }
         this.x = Math.max(5, this.x);
 
@@ -97,11 +97,9 @@ class Princess extends Sprite {
 new Princess(40, 300, "ann.png");
 
 class Door extends Sprite {
-    constructor(){
-    super();
+    constructor(x, y){
+    super(x, y);
     this.setImage("door.png");
-    this.x = game.displayWidth - 48;
-    this.y = finishPlatform - 2 * 48;
     this.accelerateOnBounce = false;
         
     }
@@ -115,3 +113,20 @@ class Door extends Sprite {
         this.name = "The exit door";
     }
 }
+new Door(game.displayWidth - 48, finishPlatform - 2 * 48);
+
+class Spider extends Sprite {
+    constructor(x, y) {
+        super(x, y);
+        this.name = "Enemy Spider";
+        this.setImage("spider.png");
+        this.x = x;
+        this.y = y;
+        this.speed = 48;
+        this.accelerateOnBounce = false;
+        this.defineAnimation("creep", 0, 2);
+        this.playAnimation("creep", true);
+    }
+}
+new Spider(200, 225);
+new Spider(550, 200);
