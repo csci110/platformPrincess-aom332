@@ -44,11 +44,12 @@ new Slider(finishPlatform.x - 48 * 5, finishPlatform.y + 48, 180);
 
 class Princess extends Sprite {
     constructor(x, y, image) {
-        super(48, 300, "ann.png");
+        super(48, 300);
+        this.setImage("ann.png");
         this.speed = 0;
         this.speedWhenWalking = 125;
-        this.defineAnimation("left", 9, 11);
-        this.defineAnimation("right", 3, 5);
+        this.defineAnimation("left", 10, 12);
+        this.defineAnimation("right", 4, 6);
 
     }
     handleLeftArrowKey() {
@@ -60,13 +61,17 @@ class Princess extends Sprite {
         this.speed = this.speedWhenWalking;
     }
     handleGameLoop() {
-        if(this.angle === 0, this.speed >= 0) {
-            this.playAnimation("right");
+        if (this.angle <= 0 && this.speed >= 0) {
+         this.playAnimation = this.handleRightArrowKey();
         }
-        
-        if(this.angle === 180, this.speed >= 0) {
-            this.playAnimation("left");
+
+        if (this.angle <= 180 && this.speed >= 0) {
+            this.playAnimation = this.handleLeftArrowKey();
         }
         this.x = Math.max(5, this.x);
     }
+    Princess(){ 
+        let ann = new Princess();
+    }
 }
+new Princess(40, 300, "ann.png");
