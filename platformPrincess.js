@@ -44,13 +44,15 @@ new Slider(finishPlatform.x - 48 * 5, finishPlatform.y + 48, 180);
 
 class Princess extends Sprite {
     constructor(x, y, image) {
-        super(48, 300);
+        super();
         this.setImage("ann.png");
         this.speed = 0;
         this.speedWhenWalking = 125;
         this.defineAnimation("left", 9, 11);
         this.defineAnimation("right", 3, 5);
         this.isFalling = false;
+        this.x = 48;
+        this.y = 300;
     }
     handleLeftArrowKey() {
         this.angle = 180;
@@ -114,7 +116,7 @@ let exit = new Door(game.displayWidth - 48, finishPlatform.y - 2 * 48);
 
 class Spider extends Sprite {
     constructor(x, y) {
-        super(x, y);
+        super();
         this.name = "Enemy Spider";
         this.setImage("spider.png");
         this.x = x;
@@ -124,6 +126,46 @@ class Spider extends Sprite {
         this.defineAnimation("creep", 0, 2);
         this.playAnimation("creep", true);
     }
+    handleGameLoop() {
+        if (this.y < ann.y - 48) {
+            this.angle = 270;
+        }
+        if (this.y > ann.y)
+            this.angle = 90;
+    }
+    handleCollision(otherSprite) {
+        // Spiders only care about collisons with Ann.
+        if (otherSprite === ann) {
+            // Spiders must hit Ann on top of her head.
+            let horizontalOffset = this.x - otherSprite.x;
+            let verticalOffset = this.y - otherSprite.y;
+            if (Math.abs(horizontalOffset) < this.width / 2 &&
+                Math.abs(verticalOffset) < 30) {
+                otherSprite.y = otherSprite.y + 1; // knock Ann off platform
+            }
+        }
+        return false;
+    }
 }
 new Spider(200, 225);
 new Spider(550, 200);
+
+class Bat extends Sprite {
+    constructor(x, y) {
+        super();
+        this.name = "A scary bat";
+        this.setImage("bat.png");
+        this.accelerateOnBounce = false;
+        this.defineAnimation("flap", 0, 1);
+        this.playAnimation("flap", true);
+        this.speed = 80;
+        this.angle = 280;
+        this.attackSpeed = 300;
+    }
+    attack() {
+        this.speed = this.attackSpeed;
+        this.aimFor(ann.x, ann.y);
+    }
+}
+let leftBat = new Bat(200, 100);
+let rightBat = new Bat(500, 75);
