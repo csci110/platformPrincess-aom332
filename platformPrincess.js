@@ -153,18 +153,35 @@ new Spider(550, 200);
 class Bat extends Sprite {
     constructor(x, y) {
         super();
+         this.x = x;
+        this.y = y;
         this.name = "A scary bat";
         this.setImage("bat.png");
         this.accelerateOnBounce = false;
         this.defineAnimation("flap", 0, 1);
         this.playAnimation("flap", true);
-        this.speed = 80;
+        this.speed = this.normalSpeed = 20;
         this.angle = 280;
         this.attackSpeed = 300;
+       
     }
     attack() {
         this.speed = this.attackSpeed;
         this.aimFor(ann.x, ann.y);
+    }
+
+    handleCollision(otherSprite) {
+        if (otherSprite === ann) {
+            otherSprite.y = otherSprite.y + 1; // knock Ann off platform
+        }
+        return false;
+    }
+
+    handleGameLoop() {
+        if (Math.random() < 0.001) {
+            this.attack();
+        }
+        // if bat is not attacking: hover.
     }
 }
 let leftBat = new Bat(200, 100);
