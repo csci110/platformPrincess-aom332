@@ -1,5 +1,5 @@
 import { game, Sprite } from "./sgc/sgc.js";
-game.setBackground("water.png", 500, 0);
+game.setBackground("cemetery.png");
 
 class Wall extends Sprite {
     constructor(x, y) {
@@ -90,28 +90,7 @@ class Princess extends Sprite {
             this.y = this.y - 3.0 * this.height; // jump
         }
     }
-    handleUpArrowKey() {
-        let now = game.getTime();
-        // get the number of seconds since game start
-        let spell = new Spell();
-        spell.x = this.x;
-        // sets the position of the spell object equal to
-        spell.y = this.y;
-        // the position of any object created from the PlayerWizard class
-        spell.name = "A spell cast by Marcus";
-        spell.setImage("annSpellSheet.png");
-        spell.angle = 0;
-        this.playAnimation("right");
-        spell.x = this.x + this.width;
 
-        // if the current time is 2 or more seconds greater than the previous spellCastTime 
-        if (now - this.spellCastTime >= 2) {
-            // reset the timer                               
-            this.spellCastTime = now;
-            // and cast a spell 
-            // insert the rest of your spell-generating code here
-        }
-    }
     handleBoundaryContact() {
         game.end('Princess Ann has drowned.\n\nBetter luck next time.');
         this.true;
@@ -132,12 +111,11 @@ class Door extends Sprite {
     handleCollision(otherSprite) {
         if (otherSprite === ann) {
             game.end('Congratulations!\n\nPrincess Ann can now pursue' +
-                'the\nstranger deeper into the castle!');
+                'the\nstranger deeper into the castle!')
         }
-        return false;
     }
 }
-let Exit = new Door(game.displayWidth - 48, finishPlatform.y - 2 * 48);
+let exit = new Door(game.displayWidth - 48, finishPlatform.y - 2 * 48);
 
 class Spider extends Sprite {
     constructor(x, y) {
@@ -157,19 +135,6 @@ class Spider extends Sprite {
         }
         if (this.y > ann.y)
             this.angle = 90;
-    }
-    handleCollision(otherSprite) {
-        // Spiders only care about collisons with Ann.
-        if (otherSprite === ann) {
-            // Spiders must hit Ann on top of her head.
-            let horizontalOffset = this.x - otherSprite.x;
-            let verticalOffset = this.y - otherSprite.y;
-            if (Math.abs(horizontalOffset) < this.width / 2 &&
-                Math.abs(verticalOffset) < 30) {
-                otherSprite.y = otherSprite.y + 1; // knock Ann off platform
-            }
-        }
-        return false;
     }
 }
 new Spider(200, 225);
@@ -243,60 +208,3 @@ class Bat extends Sprite {
 }
 let leftBat = new Bat(200, 100);
 let rightBat = new Bat(500, 75);
-
-class Spell extends Sprite {
-    constructor() {
-        super();
-        this.speed = 200;
-        this.width = 48;
-        this.height = 48;
-        this.defineAnimation("magic", 0, 7);
-        this.playAnimation("magic", true);
-   }
-
-    handleBoundryContact() {
-        // Delete spell when it leaves display area
-        game.removeSprite(this);
-    }
-    handleCollision(otherSprite) {
-
-        // Compare images so Stranger's spells don't destroy each other.
-        if (this.getImage() !== otherSprite.getImage()) {
-            // Adjust mostly blank spell image to vertical center.
-            let verticalOffset = Math.abs(this.y - otherSprite.y);
-            if (verticalOffset < this.height / 2) {
-                game.removeSprite(this);
-                new Fireball(otherSprite);
-            }
-        }
-        return false;
-    }
-}
-
-class Fireball extends Sprite {
-    constructor(deadSprite) {
-        super();
-        this.x = deadSprite.x;
-        this.y = deadSprite.y;
-        this.setImage("fireballSheet.png");
-        this.name = ("A ball of fire");
-        this.deadSprite = game.removeSprite(deadSprite);
-        this.defineAnimation("explode", 0, 16);
-        this.playAnimation("explode");
-    }
-    handleAnimationEnd(otherSprite) {
-        game.removeSprite(this);
-        if (!game.isActiveSprite(Spider)) {
-            this.deadSprite = this.deadSprite;
-        }
-        game.removeSprite(this);
-        if (!game.isActiveSprite(ann)) {
-            game.end("The princess is defeated by the mysterious\n" +
-                "Spider in the dark cloak!\n\nBetter luck next time.");
-        }
-        game.removeSprite(this);
-        if (!game.isActiveSprite(Bat)) {
-            this.deadSprite = this.deadSrite;
-        }
-    }
-}
