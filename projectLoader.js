@@ -1,6 +1,6 @@
 import {game} from "../sgc/sgc.js";
 
-game.preloadImage("cemetery.png");
+game.preloadImage("Cemetery.png");
 game.preloadImage("slider.png");
 game.preloadImage("start.png");
 game.preloadImage("finish.png");

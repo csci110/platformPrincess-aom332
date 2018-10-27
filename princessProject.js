@@ -1,16 +1,16 @@
 import { game, Sprite } from "./sgc/sgc.js";
-game.setBackground("cemetery.png");
+game.setBackground("Cemetery.png");
 
-class Wall extends Sprite {
+class Cemetery extends Sprite {
     constructor(x, y) {
         super();
-        this.name = "Wall";
-        this.setImage("wall.png", 500, 0);
+        this.name = "Cemetery";
+        this.setImage("Cemetery.png");
         this.accelerateOnBounce = false;
 
     }
 }
-new Wall(0, 175);
+new Cemetery(0, 175);
 
 class Support extends Sprite {
     constructor(x, y, image) {
